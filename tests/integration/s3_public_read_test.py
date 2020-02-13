@@ -3,6 +3,7 @@ import pytest
 import botocore
 import boto3
 import json
+import time
 
 def test_config_recorder():
     client = boto3.client('config')
@@ -28,13 +29,29 @@ def test_s3_public_read_rule_exists():
         'S3_BUCKET_PUBLIC_READ_PROHIBITED',
         ]
     )
-    print(response)
+    assert response['ConfigRules'][0]['Source']['SourceIdentifier'] == 'S3_BUCKET_PUBLIC_READ_PROHIBITED'
 
 def test_s3_public_read_non_compliant():
-    config_client = boto3.client('config')
+    create_s3_public_bucket()
+    time.sleep(5)
+    client = boto3.client('config')
+
+    response = client.get_compliance_details_by_resource(
+        ResourceType = 'AWS::S3::Bucket',
+        ResourceId = 'arctests3compliancepublicreadbucket',
+        ComplianceTypes = ['NON_COMPLIANT']
+    )
+
+    assert response['EvaluationResults'][0]['ComplianceType'] == 'NON_COMPLIANT'
+
+    delete_s3_public_bucket()
+    time.sleep(5)
+
+
+def create_s3_public_bucket():
     s3_client = boto3.client('s3')
     s3_client.create_bucket(Bucket='arctests3compliancepublicreadbucket')
-    public_policy = {
+    public_policy = """{
         "Version":"2008-10-17",
         "Statement":[{
         "Sid":"AllowPublicRead",
@@ -47,11 +64,15 @@ def test_s3_public_read_non_compliant():
             ]
         }
         ]
-    }
+    }"""
     response = s3_client.put_bucket_policy(
         Bucket='arctests3compliancepublicreadbucket',
         Policy = public_policy
     )
+
+def delete_s3_public_bucket():
+    s3_client = boto3.client('s3')
+    s3_client.delete_bucket(Bucket='arctests3compliancepublicreadbucket')
 
 def create_s3_public_read():
     client = boto3.client('config')
