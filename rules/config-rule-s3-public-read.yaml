@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Codified Config Rules
+
+Resources:
+
+  AWSConfigRuleForS3PublicRead:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: S3_BUCKET_PUBLIC_READ_PROHIBITED
+      Description: Checks that your Amazon S3 buckets do not allow public read access.
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::S3::Bucket
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_PUBLIC_READ_PROHIBITED

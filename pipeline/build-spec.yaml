@@ -1,0 +1,39 @@
+version: 0.2
+
+env:
+  variables:
+    CFN_TEMPLATES: |
+      config-rule-s3-public-read
+
+phases:
+  install:
+    runtime-versions:
+      ruby: 2.6
+      python: 3.7
+    commands:
+      - echo 'Build' action Install phase - install testing dependencies
+      - gem install cfn-nag
+      - pipenv install --dev
+
+  pre_build:
+    commands:
+      - echo Linting started on `date`
+      - cfn_nag_scan --input-path config-resources.yaml
+      - |
+        for cfn_template in $CFN_TEMPLATES; do
+          echo "Scanning CloudFormation template $cfn_template"
+          cfn_nag_scan --input-path rules/$cfn_template.yaml
+        done
+
+  build:
+    commands:
+      - |
+        for rules in $RULES; do
+          echo "Running tests for $rules"
+          cd rules/ && pipenv run rdk test-local $rules && cd ..
+        done
+
+artifacts:
+  files:
+    - '**/*'
+type: zip
