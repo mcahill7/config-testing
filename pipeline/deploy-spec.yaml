@@ -13,7 +13,7 @@ phases:
 
   build:
     commands:
-      #- aws cloudformation deploy --no-fail-on-empty-changeset --template-file config-resources.yaml --stack-name "$REPO_NAME-resources" --capabilities CAPABILITY_NAMED_IAM
+      - aws cloudformation deploy --no-fail-on-empty-changeset --template-file config-resources.yaml --stack-name "$REPO_NAME-resources" --capabilities CAPABILITY_NAMED_IAM
       - echo Build started on `date`
       - |
         for cfn_template in $CFN_TEMPLATES_MANAGED; do

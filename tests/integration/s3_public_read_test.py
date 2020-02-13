@@ -21,16 +21,37 @@ def test_delivery_channel():
     assert delivery_channels['ResponseMetadata']['HTTPStatusCode'] == 200
     assert delivery_channel_status['ResponseMetadata']['HTTPStatusCode'] == 200
 
-#def test_s3_public_read_exists():
-#    client = boto3.client('config')
-#    response = client.describe_config_rules(
-#    ConfigRuleNames=[
-#        'S3_BUCKET_PUBLIC_READ_PROHIBITED',
-#        ]
-#    )
+def test_s3_public_read_rule_exists():
+    client = boto3.client('config')
+    response = client.describe_config_rules(
+    ConfigRuleNames=[
+        'S3_BUCKET_PUBLIC_READ_PROHIBITED',
+        ]
+    )
+    print(response)
 
-#def test_s3_public_read_shows_non_compliant():
-#    client = boto3.client('config')
+def test_s3_public_read_non_compliant():
+    config_client = boto3.client('config')
+    s3_client = boto3.client('s3')
+    s3_client.create_bucket(Bucket='arctests3compliancepublicreadbucket')
+    public_policy = {
+        "Version":"2008-10-17",
+        "Statement":[{
+        "Sid":"AllowPublicRead",
+            "Effect":"Allow",
+            "Principal": {
+                "AWS": "*"
+                },
+            "Action":["s3:GetObject"],
+            "Resource":["arn:aws:s3:::arctests3compliancepublicreadbucket/*"
+            ]
+        }
+        ]
+    }
+    response = s3_client.put_bucket_policy(
+        Bucket='arctests3compliancepublicreadbucket',
+        Policy = public_policy
+    )
 
 def create_s3_public_read():
     client = boto3.client('config')
