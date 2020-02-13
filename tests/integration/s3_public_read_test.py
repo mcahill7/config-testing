@@ -74,21 +74,4 @@ def delete_s3_public_bucket():
     s3_client = boto3.client('s3')
     s3_client.delete_bucket(Bucket='arctests3compliancepublicreadbucket')
 
-def create_s3_public_read():
-    client = boto3.client('config')
-    response = client.put_config_rule(
-        ConfigRule={
-            'ConfigRuleName': 'S3_BUCKET_PUBLIC_READ_PROHIBITED',
-            'Description': 'Checks that your Amazon S3 buckets do not allow public read access.',
-            'Scope': {
-                'ComplianceResourceTypes': [
-                    'AWS::S3::Bucket'
-                ],
-            },
-            'Source': {
-                'Owner': 'AWS',
-                'SourceIdentifier': 'S3_BUCKET_PUBLIC_READ_PROHIBITED'
-            },
-            'ConfigRuleState': 'ACTIVE'
-        }
-    )
+
