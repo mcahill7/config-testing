@@ -9,9 +9,10 @@ Parameters:
     Default: mcahill7
   BranchName:
     Type: String
-    Default: master
+    Default: sg
   GitHubToken:
     Type: String
+    Default: 123
   BuildAgentImage:
     Type: String
     Default: aws/codebuild/standard:2.0
@@ -314,7 +315,7 @@ Resources:
                   - lambda:*
                   - config:Put*
                   - iam:*
-                  - config:*
+                  - ec2:*
                 Resource:
                   - '*'
   ActionBuild:

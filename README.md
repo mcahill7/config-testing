@@ -1,11 +1,11 @@
-# config-testing
+# sg-testing
 
-POC to deploy managed config rule and run integration test against it
+POC to deploy test and deploy security groups using cfn-nag
 
 ## Pipeline
 To create the pipeline run the following:
 ```
-aws cloudformation create-stack --stack-name config-testing --template-body file://pipeline/pipeline.yaml --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name sg-testing --template-body file://pipeline/pipeline.yaml --capabilities CAPABILITY_NAMED_IAM
 ```
 
 ## Tests

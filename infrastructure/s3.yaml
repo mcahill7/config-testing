@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: s3 Bucket to hold cfn nag rules
+
+Resources:
+    CfnNagRulesBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: cfn-nag-rules-demo

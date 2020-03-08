@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Wide Open SecurityGroup
+
+Resources:
+  WideOpenSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Wide OpenSecurityG roup
+      SecurityGroupIngress:
+        -
+          IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+          Description: Allow Ingress traffic from the world on port 3389
+        -
+          IpProtocol: tcp
+          FromPort: 445
+          ToPort: 445
+          CidrIp: 0.0.0.0/0
+          Description: Allow Ingress traffic from the world on port 445
+      SecurityGroupEgress:
+        -
+          IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+          Description: Allow Egress traffic from the world on port 3389
+        -
+          IpProtocol: tcp
+          FromPort: 445
+          ToPort: 445
+          CidrIp: 0.0.0.0/0
+          Description: Allow Egress traffic from the world on port 445
+      VpcId: vpc-1234
+
+
+
+
